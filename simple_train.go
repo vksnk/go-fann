@@ -12,5 +12,6 @@ func main() {
 
 	ann := fann.CreateStandart(numLayers, []uint32{2, 3, 1})
 	ann.TrainOnFile("xor.data", maxEpochs, epochsBetweenReports, desiredError)
-	ann.Foo()
+	ann.Save("xor_float.net")
+	ann.Destroy()
 }

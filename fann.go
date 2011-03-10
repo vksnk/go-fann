@@ -35,6 +35,16 @@ func (ann *Ann) TrainOnFile(filename string, maxEpoches uint32, epochBetweenRepo
 	C.fann_train_on_file(ann.object, cfn, C.uint(maxEpoches), C.uint(epochBetweenReports), C.float(desiredError));
 }
 
+func (ann *Ann) Save(filename string) {
+	cfn := C.CString(filename)
+	defer C.free(unsafe.Pointer(cfn))
+	C.fann_save(ann.object, cfn)
+}
+
+func (ann *Ann) Destroy() {
+	C.fann_destroy(ann.object)
+}
+
 func (*Ann) Foo() {
 
 }
