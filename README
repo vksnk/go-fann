@@ -1,0 +1,5 @@
+1. Run `make` to build a library
+2. Run `make simple_train` to build example.
+3. On my PC ./simple_train runs using commandline:
+
+LD_LIBRARY_PATH=/usr/local/lib/ ./simple

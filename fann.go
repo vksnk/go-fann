@@ -28,6 +28,10 @@ func CreateStandart(numLayers uint, layers []uint32) (*Ann) {
 	ann.object = C.fann_create_standard_array(C.uint(numLayers), (*C.uint)(&layers[0]))
 	return &ann
 }
+
+func (*Ann) Foo() {
+
+}
 /*
 func CreateSparse(concentration float32, num_layers uint, layers []int) {
 }

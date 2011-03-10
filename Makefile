@@ -1,6 +1,6 @@
 include  $(GOROOT)/src/Make.inc
 
-TARG=dp
+TARG=fann
 
 CGOFILES=\
 	fann.go\
