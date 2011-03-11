@@ -60,6 +60,18 @@ func CreateFromFile(filename string) (*Ann) {
 }
 
 //run & test functions
+//FANN_EXTERNAL struct fann_train_data *FANN_API fann_read_train_from_file(const char *filename);
+func ReadTrainFromFile(filename string) (*TrainData) {
+	var td TrainData
+
+	cfn := C.CString(filename)
+	defer C.free(unsafe.Pointer(cfn))
+
+	td.object = C.fann_read_train_from_file(cfn)
+
+	return &td
+}
+
 func (ann *Ann) Run(input []FannType) ([]FannType) {
 	c_out := C.fann_run(ann.object, (*C.fann_type)(&input[0]))
 	outputNum := ann.GetNumOutput()
@@ -70,6 +82,10 @@ func (ann *Ann) Run(input []FannType) ([]FannType) {
 
 func (ann *Ann) Train(input []FannType,  desired_output []FannType) ( ) {
 	C.fann_train(ann.object, (*C.fann_type)(&input[0]), (*C.fann_type)(&desired_output[0]))
+}
+
+func (ann *Ann) TrainOnData(td *TrainData, max_epochs uint32, epochs_between_reports uint32, desired_error float32) () {
+	C.fann_train_on_data(ann.object, td.object, C.uint(max_epochs), C.uint(epochs_between_reports), C.float(desired_error))
 }
 
 func (ann *Ann) TrainOnFile(filename string, maxEpoches uint32, epochBetweenReports uint32, desiredError float32) {
@@ -223,23 +239,24 @@ func (ann *Ann) SetWeight(from_neuron uint32, to_neuron uint32, weight FannType)
 type ActivationFunc C.enum_fann_activationfunc_enum
 
 
-var FANN_LINEAR ActivationFunc = C.FANN_LINEAR
-var FANN_THRESHOLD ActivationFunc = C.FANN_THRESHOLD
-var FANN_THRESHOLD_SYMMETRIC ActivationFunc = C.FANN_THRESHOLD_SYMMETRIC
-var FANN_SIGMOID ActivationFunc = C.FANN_SIGMOID
-var FANN_SIGMOID_STEPWISE ActivationFunc = C.FANN_SIGMOID_STEPWISE
-var FANN_SIGMOID_SYMMETRIC ActivationFunc = C.FANN_SIGMOID_SYMMETRIC
-var FANN_GAUSSIAN ActivationFunc = C.FANN_GAUSSIAN
-var FANN_GAUSSIAN_SYMMETRIC ActivationFunc = C.FANN_GAUSSIAN_SYMMETRIC
-var FANN_GAUSSIAN_STEPWISE ActivationFunc = C.FANN_GAUSSIAN_STEPWISE
-var FANN_ELLIOT ActivationFunc = C.FANN_ELLIOT
-var FANN_ELLIOT_SYMMETRIC ActivationFunc = C.FANN_ELLIOT_SYMMETRIC
-var FANN_LINEAR_PIECE ActivationFunc = C.FANN_LINEAR_PIECE
-var FANN_LINEAR_PIECE_SYMMETRIC ActivationFunc = C.FANN_LINEAR_PIECE_SYMMETRIC
-var FANN_SIN_SYMMETRIC ActivationFunc = C.FANN_SIN_SYMMETRIC
-var FANN_COS_SYMMETRIC ActivationFunc = C.FANN_COS_SYMMETRIC
-var FANN_SIN ActivationFunc = C.FANN_SIN
-var FANN_COS ActivationFunc = C.FANN_COS
+var LINEAR ActivationFunc = C.FANN_LINEAR
+var THRESHOLD ActivationFunc = C.FANN_THRESHOLD
+var THRESHOLD_SYMMETRIC ActivationFunc = C.FANN_THRESHOLD_SYMMETRIC
+var SIGMOID ActivationFunc = C.FANN_SIGMOID
+var SIGMOID_STEPWISE ActivationFunc = C.FANN_SIGMOID_STEPWISE
+var SIGMOID_SYMMETRIC ActivationFunc = C.FANN_SIGMOID_SYMMETRIC
+var SIGMOID_SYMMETRIC_STEPWISE ActivationFunc = C.FANN_SIGMOID_SYMMETRIC_STEPWISE
+var GAUSSIAN ActivationFunc = C.FANN_GAUSSIAN
+var GAUSSIAN_SYMMETRIC ActivationFunc = C.FANN_GAUSSIAN_SYMMETRIC
+var GAUSSIAN_STEPWISE ActivationFunc = C.FANN_GAUSSIAN_STEPWISE
+var ELLIOT ActivationFunc = C.FANN_ELLIOT
+var ELLIOT_SYMMETRIC ActivationFunc = C.FANN_ELLIOT_SYMMETRIC
+var LINEAR_PIECE ActivationFunc = C.FANN_LINEAR_PIECE
+var LINEAR_PIECE_SYMMETRIC ActivationFunc = C.FANN_LINEAR_PIECE_SYMMETRIC
+var SIN_SYMMETRIC ActivationFunc = C.FANN_SIN_SYMMETRIC
+var COS_SYMMETRIC ActivationFunc = C.FANN_COS_SYMMETRIC
+var SIN ActivationFunc = C.FANN_SIN
+var COS ActivationFunc = C.FANN_COS
 
 //net types
 type Nettype C.enum_fann_nettype_enum
