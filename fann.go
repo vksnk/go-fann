@@ -123,6 +123,7 @@ func (ann *Ann) Destroy() {
 	C.fann_destroy(ann.object)
 }
 
+//getters
 func (ann *Ann) GetNumInput() (uint32) {
 	return uint32(C.fann_get_num_input(ann.object))
 }
@@ -138,4 +139,22 @@ func (ann *Ann) GetTotalNeurons() (uint32) {
 func (ann *Ann) GetTotalConnections() (uint32) {
 	return uint32(C.fann_get_total_connections(ann.object))
 }
+
+func (ann *Ann) GetConnectionRate() (float32) {
+	return float32(C.fann_get_connection_rate(ann.object))
+}
+
+func (ann *Ann) GetNumLayers() (uint32) {
+	return uint32(C.fann_get_num_layers(ann.object))
+}
+/*
+func (ann *Ann) GetDecimalPoint() (uint32) {
+	return uint32(C.fann_get_decimal_point(ann.object))
+}
+
+func (ann *Ann) GetMultiplier() (uint32) {
+	return uint32(C.fann_get_multiplier(ann.object))
+}
+*/
+
 
