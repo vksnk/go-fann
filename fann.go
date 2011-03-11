@@ -20,12 +20,13 @@ import "unsafe"
 
 type FannType C.fann_type
 
+type Connection C.struct_fann_connection
+
 type TrainData struct {
 	object *C.struct_fann_train_data
 }
 
-func ReadFromFile(fn string) {
-}
+
 
 type Ann struct {
 	object *C.struct_fann
@@ -67,13 +68,52 @@ func (ann *Ann) Run(input []FannType) ([]FannType) {
 	return out
 }
 
-//train functions
+func (ann *Ann) Train(input []FannType,  desired_output []FannType) ( ) {
+	C.fann_train(ann.object, (*C.fann_type)(&input[0]), (*C.fann_type)(&desired_output[0]))
+}
+
 func (ann *Ann) TrainOnFile(filename string, maxEpoches uint32, epochBetweenReports uint32, desiredError float32) {
 	cfn := C.CString(filename)
 	defer C.free(unsafe.Pointer(cfn))
 	C.fann_train_on_file(ann.object, cfn, C.uint(maxEpoches), C.uint(epochBetweenReports), C.float(desiredError));
 }
 
+func (td *TrainData) Destroy() ( ) {
+	C.fann_destroy_train(td.object)
+}
+
+func (td *TrainData) ShuffleTrainData() () {
+	C.fann_shuffle_train_data(td.object)
+}
+
+func (ann *Ann) ScaleTrain(td *TrainData) () {
+	C.fann_scale_train(ann.object, td.object)
+}
+
+func (ann *Ann) DescaleTrain(td *TrainData) ( ) {
+	C.fann_descale_train(ann.object, td.object)
+}
+
+//TODO: finish it
+func (ann *Ann) Test(input []FannType,  desired_output []FannType) ( ) {
+	C.fann_test(ann.object, (*C.fann_type)(&input[0]), (*C.fann_type)(&desired_output[0]))
+}
+
+func (ann *Ann) GetMSE() (float32) {
+	return float32(C.fann_get_MSE(ann.object))
+}
+
+func (ann *Ann) GetBitFail() (uint32) {
+	return uint32(C.fann_get_bit_fail(ann.object))
+}
+
+func (ann *Ann) ResetMSE() () {
+	C.fann_reset_MSE(ann.object)
+}
+
+func (ann *Ann) InitWeights(train_data *TrainData) () {
+	C.fann_init_weights(ann.object, train_data.object)
+}
 
 func (ann *Ann) RandomizeWeights(min_weight FannType, max_weight FannType) ( ) {
 	C.fann_randomize_weights(ann.object, C.fann_type(min_weight), C.fann_type(max_weight))
@@ -136,6 +176,7 @@ func (ann *Ann) GetNumLayers() (uint32) {
 	return uint32(C.fann_get_num_layers(ann.object))
 }
 /*
+TODO: finish it
 func (ann *Ann) GetDecimalPoint() (uint32) {
 	return uint32(C.fann_get_decimal_point(ann.object))
 }
@@ -144,6 +185,39 @@ func (ann *Ann) GetMultiplier() (uint32) {
 	return uint32(C.fann_get_multiplier(ann.object))
 }
 */
+
+func (ann *Ann) GetNetworkType() (Nettype) {
+	return Nettype(C.fann_get_network_type(ann.object))
+}
+
+func (ann *Ann) GetLayerArray() ([]uint32) {
+	layers := make([]uint32, ann.GetNumLayers())
+	C.fann_get_layer_array(ann.object, (*C.uint)(&layers[0]))
+	return layers
+}
+
+func (ann *Ann) GetBiasArray() ([]uint32) {
+	bias := make([]uint32, ann.GetNumLayers())
+	C.fann_get_bias_array(ann.object, (*C.uint)(&bias[0]))
+	return bias
+}
+
+/*
+TODO: finish it
+//FANN_EXTERNAL void FANN_API fann_get_connection_array(struct fann *ann,struct fann_connection *connections);
+func (ann *Ann) GetConnectionArray(connections []Connection) ( ) {
+	C.fann_get_connection_array(ann.object, )
+}
+*/
+
+//setters
+func (ann *Ann) SetWeightArray(connections []Connection, num_connections uint32) ( ) {
+	C.fann_set_weight_array(ann.object, (*C.struct_fann_connection)(&connections[0]), C.uint(num_connections))
+}
+
+func (ann *Ann) SetWeight(from_neuron uint32, to_neuron uint32, weight FannType) ( ) {
+	C.fann_set_weight(ann.object, C.uint(from_neuron), C.uint(to_neuron), C.fann_type(weight))
+}
 
 //list all activation functions
 type ActivationFunc C.enum_fann_activationfunc_enum
@@ -166,4 +240,11 @@ var FANN_SIN_SYMMETRIC ActivationFunc = C.FANN_SIN_SYMMETRIC
 var FANN_COS_SYMMETRIC ActivationFunc = C.FANN_COS_SYMMETRIC
 var FANN_SIN ActivationFunc = C.FANN_SIN
 var FANN_COS ActivationFunc = C.FANN_COS
+
+//net types
+type Nettype C.enum_fann_nettype_enum
+
+var FANN_NETTYPE_LAYER Nettype = C.FANN_NETTYPE_LAYER
+var FANN_NETTYPE_SHORTCUT Nettype = C.FANN_NETTYPE_SHORTCUT
+
 
