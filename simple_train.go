@@ -6,7 +6,7 @@ import (
 
 func main() {
 	const numLayers = 3
-	const desiredError = 0.001
+	const desiredError = 0.00001
 	const maxEpochs = 500000
 	const epochsBetweenReports = 1000
 

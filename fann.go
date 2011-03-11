@@ -9,30 +9,14 @@ const unsigned int* go2uintArray(unsigned int* arr, int n) {
 	return malloc(sizeof(unsigned int) * n);
 }
 
+static void cpFannTypeArray(fann_type* src, fann_type* dst, unsigned int n) {
+	unsigned int i = 0;
+	for(; i < n; i++)
+		dst[i] = src[i];
+}
 */
 import "C"
 import "unsafe"
-
-type ActivationFunc C.enum_fann_activationfunc_enum
-
-
-var FANN_LINEAR ActivationFunc = C.FANN_LINEAR
-var FANN_THRESHOLD ActivationFunc = C.FANN_THRESHOLD
-var FANN_THRESHOLD_SYMMETRIC ActivationFunc = C.FANN_THRESHOLD_SYMMETRIC
-var FANN_SIGMOID ActivationFunc = C.FANN_SIGMOID
-var FANN_SIGMOID_STEPWISE ActivationFunc = C.FANN_SIGMOID_STEPWISE
-var FANN_SIGMOID_SYMMETRIC ActivationFunc = C.FANN_SIGMOID_SYMMETRIC
-var FANN_GAUSSIAN ActivationFunc = C.FANN_GAUSSIAN
-var FANN_GAUSSIAN_SYMMETRIC ActivationFunc = C.FANN_GAUSSIAN_SYMMETRIC
-var FANN_GAUSSIAN_STEPWISE ActivationFunc = C.FANN_GAUSSIAN_STEPWISE
-var FANN_ELLIOT ActivationFunc = C.FANN_ELLIOT
-var FANN_ELLIOT_SYMMETRIC ActivationFunc = C.FANN_ELLIOT_SYMMETRIC
-var FANN_LINEAR_PIECE ActivationFunc = C.FANN_LINEAR_PIECE
-var FANN_LINEAR_PIECE_SYMMETRIC ActivationFunc = C.FANN_LINEAR_PIECE_SYMMETRIC
-var FANN_SIN_SYMMETRIC ActivationFunc = C.FANN_SIN_SYMMETRIC
-var FANN_COS_SYMMETRIC ActivationFunc = C.FANN_COS_SYMMETRIC
-var FANN_SIN ActivationFunc = C.FANN_SIN
-var FANN_COS ActivationFunc = C.FANN_COS
 
 type FannType C.fann_type
 
@@ -74,23 +58,27 @@ func CreateFromFile(filename string) (*Ann) {
 	return &ann
 }
 
+//run & test functions
+func (ann *Ann) Run(input []FannType) ([]FannType) {
+	c_out := C.fann_run(ann.object, (*C.fann_type)(&input[0]))
+	outputNum := ann.GetNumOutput()
+	out := make([]FannType, outputNum)
+	C.cpFannTypeArray(c_out, (*C.fann_type)(&out[0]), C.uint(outputNum))
+	return out
+}
+
+//train functions
 func (ann *Ann) TrainOnFile(filename string, maxEpoches uint32, epochBetweenReports uint32, desiredError float32) {
 	cfn := C.CString(filename)
 	defer C.free(unsafe.Pointer(cfn))
 	C.fann_train_on_file(ann.object, cfn, C.uint(maxEpoches), C.uint(epochBetweenReports), C.float(desiredError));
 }
 
-func (ann *Ann) Run(input []FannType) ([]FannType) {
-	c_out := C.fann_run(ann.object, (*C.fann_type)(&input[0]))
-	out := make([]FannType, ann.GetNumOutput())
-	out[0] = FannType(*c_out)
-	return out
-}
 
 func (ann *Ann) RandomizeWeights(min_weight FannType, max_weight FannType) ( ) {
 	C.fann_randomize_weights(ann.object, C.fann_type(min_weight), C.fann_type(max_weight))
 }
-
+//print functions
 func (ann *Ann) PrintConnections() ( ) {
 	C.fann_print_connections(ann.object)
 }
@@ -106,7 +94,7 @@ func (ann *Ann) SetActivationFunctionHidden(tp ActivationFunc) {
 func (ann *Ann) SetActivationFunctionOutput(tp ActivationFunc) {
 	C.fann_set_activation_function_output(ann.object, C.enum_fann_activationfunc_enum(tp))
 }
-
+//save functions
 func (ann *Ann) Save(filename string) {
 	cfn := C.CString(filename)
 	defer C.free(unsafe.Pointer(cfn))
@@ -118,7 +106,7 @@ func (ann *Ann) SaveToFixed(configuration_file string) {
 	defer C.free(unsafe.Pointer(cfn))
 	C.fann_save_to_fixed(ann.object, cfn)
 }
-
+//destroy function
 func (ann *Ann) Destroy() {
 	C.fann_destroy(ann.object)
 }
@@ -157,4 +145,25 @@ func (ann *Ann) GetMultiplier() (uint32) {
 }
 */
 
+//list all activation functions
+type ActivationFunc C.enum_fann_activationfunc_enum
+
+
+var FANN_LINEAR ActivationFunc = C.FANN_LINEAR
+var FANN_THRESHOLD ActivationFunc = C.FANN_THRESHOLD
+var FANN_THRESHOLD_SYMMETRIC ActivationFunc = C.FANN_THRESHOLD_SYMMETRIC
+var FANN_SIGMOID ActivationFunc = C.FANN_SIGMOID
+var FANN_SIGMOID_STEPWISE ActivationFunc = C.FANN_SIGMOID_STEPWISE
+var FANN_SIGMOID_SYMMETRIC ActivationFunc = C.FANN_SIGMOID_SYMMETRIC
+var FANN_GAUSSIAN ActivationFunc = C.FANN_GAUSSIAN
+var FANN_GAUSSIAN_SYMMETRIC ActivationFunc = C.FANN_GAUSSIAN_SYMMETRIC
+var FANN_GAUSSIAN_STEPWISE ActivationFunc = C.FANN_GAUSSIAN_STEPWISE
+var FANN_ELLIOT ActivationFunc = C.FANN_ELLIOT
+var FANN_ELLIOT_SYMMETRIC ActivationFunc = C.FANN_ELLIOT_SYMMETRIC
+var FANN_LINEAR_PIECE ActivationFunc = C.FANN_LINEAR_PIECE
+var FANN_LINEAR_PIECE_SYMMETRIC ActivationFunc = C.FANN_LINEAR_PIECE_SYMMETRIC
+var FANN_SIN_SYMMETRIC ActivationFunc = C.FANN_SIN_SYMMETRIC
+var FANN_COS_SYMMETRIC ActivationFunc = C.FANN_COS_SYMMETRIC
+var FANN_SIN ActivationFunc = C.FANN_SIN
+var FANN_COS ActivationFunc = C.FANN_COS
 
