@@ -53,6 +53,12 @@ func CreateStandart(numLayers uint, layers []uint32) (*Ann) {
 	return &ann
 }
 
+func CreateSparse(concentration float32, numLayers uint, layers []uint32) (*Ann) {
+	var ann Ann
+	ann.object = C.fann_create_sparse_array(C.float(concentration), C.uint(numLayers), (*C.uint)(&layers[0]))
+	return &ann
+}
+
 func CreateFromFile(filename string) (*Ann) {
 	var ann Ann
 	cfn := C.CString(filename)
@@ -95,7 +101,3 @@ func (ann *Ann) Destroy() {
 func (ann *Ann) GetNumOutput() (uint32) {
 	return uint32(C.fann_get_num_output(ann.object))
 }
-/*
-func CreateSparse(concentration float32, num_layers uint, layers []int) {
-}
-*/
