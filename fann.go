@@ -47,6 +47,7 @@ type Ann struct {
 	object *C.struct_fann
 }
 
+//Create ann functions
 func CreateStandart(numLayers uint, layers []uint32) (*Ann) {
 	var ann Ann
 	ann.object = C.fann_create_standard_array(C.uint(numLayers), (*C.uint)(&layers[0]))
@@ -56,6 +57,12 @@ func CreateStandart(numLayers uint, layers []uint32) (*Ann) {
 func CreateSparse(concentration float32, numLayers uint, layers []uint32) (*Ann) {
 	var ann Ann
 	ann.object = C.fann_create_sparse_array(C.float(concentration), C.uint(numLayers), (*C.uint)(&layers[0]))
+	return &ann
+}
+
+func CreateShortcut(num_layers uint32, layers []uint32) (*Ann) {
+	var ann Ann
+	ann.object = C.fann_create_shortcut_array(C.uint(num_layers), (*C.uint)(&layers[0]))
 	return &ann
 }
 
@@ -80,6 +87,18 @@ func (ann *Ann) Run(input []FannType) ([]FannType) {
 	return out
 }
 
+func (ann *Ann) RandomizeWeights(min_weight FannType, max_weight FannType) ( ) {
+	C.fann_randomize_weights(ann.object, C.fann_type(min_weight), C.fann_type(max_weight))
+}
+
+func (ann *Ann) PrintConnections() ( ) {
+	C.fann_print_connections(ann.object)
+}
+
+func (ann *Ann) PrintParameters() ( ) {
+	C.fann_print_parameters(ann.object)
+}
+
 func (ann *Ann) SetActivationFunctionHidden(tp ActivationFunc) {
 	C.fann_set_activation_function_hidden(ann.object, C.enum_fann_activationfunc_enum(tp))
 }
@@ -94,10 +113,29 @@ func (ann *Ann) Save(filename string) {
 	C.fann_save(ann.object, cfn)
 }
 
+func (ann *Ann) SaveToFixed(configuration_file string) {
+	cfn := C.CString(configuration_file)
+	defer C.free(unsafe.Pointer(cfn))
+	C.fann_save_to_fixed(ann.object, cfn)
+}
+
 func (ann *Ann) Destroy() {
 	C.fann_destroy(ann.object)
+}
+
+func (ann *Ann) GetNumInput() (uint32) {
+	return uint32(C.fann_get_num_input(ann.object))
 }
 
 func (ann *Ann) GetNumOutput() (uint32) {
 	return uint32(C.fann_get_num_output(ann.object))
 }
+
+func (ann *Ann) GetTotalNeurons() (uint32) {
+	return uint32(C.fann_get_total_neurons(ann.object))
+}
+
+func (ann *Ann) GetTotalConnections() (uint32) {
+	return uint32(C.fann_get_total_connections(ann.object))
+}
+
