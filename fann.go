@@ -14,6 +14,15 @@ static void cpFannTypeArray(fann_type* src, fann_type* dst, unsigned int n) {
 	for(; i < n; i++)
 		dst[i] = src[i];
 }
+
+static unsigned int td_get_num_input(struct fann_train_data* td) {
+	return td->num_input;
+}
+
+static unsigned int td_get_num_output(struct fann_train_data* td) {
+	return td->num_output;
+}
+
 */
 import "C"
 import "unsafe"
@@ -233,6 +242,16 @@ func (ann *Ann) SetWeightArray(connections []Connection, num_connections uint32)
 
 func (ann *Ann) SetWeight(from_neuron uint32, to_neuron uint32, weight FannType) ( ) {
 	C.fann_set_weight(ann.object, C.uint(from_neuron), C.uint(to_neuron), C.fann_type(weight))
+}
+
+
+//additional functions
+func (td *TrainData) GetNumInput() (uint32) {
+	return uint32(C.td_get_num_input(td.object))
+}
+
+func (td *TrainData) GetNumOutput() (uint32) {
+	return uint32(C.td_get_num_output(td.object))
 }
 
 //list all activation functions

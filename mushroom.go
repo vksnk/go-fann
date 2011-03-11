@@ -7,13 +7,15 @@ import (
 
 func main() {
 	const numLayers = 3
+	const numNeuronsHidden = 32
 	const desiredError = 0.0001
 	const maxEpochs = 300
 	const epochsBetweenReports = 10
 
 	fmt.Println("Creating network.")
-	ann := fann.CreateStandart(numLayers, []uint32{2, 3, 1})
+
 	trainData := fann.ReadTrainFromFile("datasets/mushroom.train")
+	ann := fann.CreateStandart(numLayers, []uint32{trainData.GetNumInput(), numNeuronsHidden, 1})
 
 	fmt.Println("Training network.")
 	ann.SetActivationFunctionHidden(fann.SIGMOID_SYMMETRIC_STEPWISE)
