@@ -13,6 +13,29 @@ const unsigned int* go2uintArray(unsigned int* arr, int n) {
 import "C"
 import "unsafe"
 
+type ActivationFunc C.enum_fann_activationfunc_enum
+
+
+var FANN_LINEAR ActivationFunc = C.FANN_LINEAR
+var FANN_THRESHOLD ActivationFunc = C.FANN_THRESHOLD
+var FANN_THRESHOLD_SYMMETRIC ActivationFunc = C.FANN_THRESHOLD_SYMMETRIC
+var FANN_SIGMOID ActivationFunc = C.FANN_SIGMOID
+var FANN_SIGMOID_STEPWISE ActivationFunc = C.FANN_SIGMOID_STEPWISE
+var FANN_SIGMOID_SYMMETRIC ActivationFunc = C.FANN_SIGMOID_SYMMETRIC
+var FANN_SIGMOID_SYMMETRIC_STEPWISE ActivationFunc = C.FANN_SIGMOID_SYMMETRIC_STEPWISE
+/*
+	FANN_GAUSSIAN,
+	FANN_GAUSSIAN_SYMMETRIC,
+	FANN_GAUSSIAN_STEPWISE,
+	FANN_ELLIOT,
+	FANN_ELLIOT_SYMMETRIC,
+	FANN_LINEAR_PIECE,
+	FANN_LINEAR_PIECE_SYMMETRIC,
+	FANN_SIN_SYMMETRIC,
+	FANN_COS_SYMMETRIC,
+	FANN_SIN,
+	FANN_COS
+*/
 type FannType C.fann_type
 
 type TrainData struct {
@@ -48,9 +71,17 @@ func (ann *Ann) TrainOnFile(filename string, maxEpoches uint32, epochBetweenRepo
 
 func (ann *Ann) Run(input []FannType) ([]FannType) {
 	c_out := C.fann_run(ann.object, (*C.fann_type)(&input[0]))
-	out := make([]FannType, 1)
+	out := make([]FannType, ann.GetNumOutput())
 	out[0] = FannType(*c_out)
 	return out
+}
+
+func (ann *Ann) SetActivationFunctionHidden(tp ActivationFunc) {
+	C.fann_set_activation_function_hidden(ann.object, C.enum_fann_activationfunc_enum(tp))
+}
+
+func (ann *Ann) SetActivationFunctionOutput(tp ActivationFunc) {
+	C.fann_set_activation_function_output(ann.object, C.enum_fann_activationfunc_enum(tp))
 }
 
 func (ann *Ann) Save(filename string) {
@@ -63,8 +94,8 @@ func (ann *Ann) Destroy() {
 	C.fann_destroy(ann.object)
 }
 
-func (*Ann) Foo() {
-
+func (ann *Ann) GetNumOutput() (uint32) {
+	return uint32(C.fann_get_num_output(ann.object))
 }
 /*
 func CreateSparse(concentration float32, num_layers uint, layers []int) {
