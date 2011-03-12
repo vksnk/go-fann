@@ -5,6 +5,7 @@ TARG=fann
 CGOFILES=\
 	fann.go\
 	fann-train.go\
+	fann-enums.go\
 
 CGO_LDFLAGS=-lfann -lm
 
