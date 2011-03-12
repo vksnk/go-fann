@@ -36,11 +36,11 @@ func main() {
 
 	fmt.Printf("MSE error on test data: %f\n", ann.GetMSE())
 
-	fmt.Println("Saving network.");
+	fmt.Println("Saving network.")
 
-	ann.Save("mushroom_float.net");
+	ann.Save("mushroom_float.net")
 
-	fmt.Println("Cleaning up.");
+	fmt.Println("Cleaning up.")
 
 	trainData.Destroy()
 	testData.Destroy()
