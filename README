@@ -1,5 +1,8 @@
-1. Run `make` to build a library
-2. Run `make simple_train` to build example.
-3. On my PC ./simple_train runs using commandline:
+Go bindings for Fast Artificial Neural Networks(FANN) library.
+http://leenissen.dk/fann/wp/
 
-LD_LIBRARY_PATH=/usr/local/lib/ ./simple
+To build:
+1. Run `make` to build a library
+2.a)Run `make example_name` to build example.
+  b)./example_name
+
