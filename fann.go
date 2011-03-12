@@ -91,10 +91,12 @@ func (ann *Ann) TrainOnFile(filename string, maxEpoches uint32, epochBetweenRepo
 	C.fann_train_on_file(ann.object, cfn, C.uint(maxEpoches), C.uint(epochBetweenReports), C.float(desiredError));
 }
 
-//TODO: finish it
-//FANN_EXTERNAL fann_type * FANN_API fann_test(struct fann *ann, fann_type * input,fann_type * desired_output);
-func (ann *Ann) Test(input []FannType,  desired_output []FannType) ( ) {
-	C.fann_test(ann.object, (*C.fann_type)(&input[0]), (*C.fann_type)(&desired_output[0]))
+func (ann *Ann) Test(input []FannType,  desired_output []FannType) ([]FannType) {
+	c_out := C.fann_test(ann.object, (*C.fann_type)(&input[0]), (*C.fann_type)(&desired_output[0]))
+	outputNum := ann.GetNumOutput()
+	out := make([]FannType, outputNum)
+	C.cpFannTypeArray(c_out, (*C.fann_type)(&out[0]), C.uint(outputNum))
+	return out
 }
 
 func (ann *Ann) GetMSE() (float32) {
@@ -174,7 +176,7 @@ func (ann *Ann) GetNumLayers() (uint32) {
 	return uint32(C.fann_get_num_layers(ann.object))
 }
 /*
-TODO: finish it
+//TODO: finish it
 func (ann *Ann) GetDecimalPoint() (uint32) {
 	return uint32(C.fann_get_decimal_point(ann.object))
 }
@@ -337,4 +339,50 @@ func (ann *Ann) SetTrainErrorFunction(train_error_function TrainErrorFunction) (
 	C.fann_set_train_error_function(ann.object, C.enum_fann_errorfunc_enum(train_error_function))
 }
 
+func (ann *Ann) SetInputScalingParams(td *TrainData, new_input_min float32, new_input_max float32) (int) {
+	return int(C.fann_set_input_scaling_params(ann.object, td.object, C.float(new_input_min), C.float(new_input_max)))
+}
 
+func (ann *Ann) SetOutputScalingParams(td *TrainData, new_output_min float32, new_output_max float32) (int) {
+	return int(C.fann_set_output_scaling_params(ann.object, td.object, C.float(new_output_min), C.float(new_output_max)))
+}
+
+func (ann *Ann) SetScalingParams(td *TrainData, new_input_min float32, new_input_max float32, new_output_min float32, new_output_max float32) (int) {
+	return int(C.fann_set_scaling_params(ann.object, td.object, C.float(new_input_min), C.float(new_input_max), C.float(new_output_min), C.float(new_output_max)))
+}
+
+func (ann *Ann) ClearScalingParams() (int) {
+	return int(C.fann_clear_scaling_params(ann.object))
+}
+
+func (ann *Ann) GetActivationFunction(layer int, neuron int) (ActivationFunc) {
+	return ActivationFunc(C.fann_get_activation_function(ann.object, C.int(layer), C.int(neuron)))
+}
+
+func (ann *Ann) SetActivationFunction(activation_function ActivationFunc, layer int, neuron int) ( ) {
+	C.fann_set_activation_function(ann.object, C.enum_fann_activationfunc_enum(activation_function), C.int(layer), C.int(neuron))
+}
+
+func (ann *Ann) SetActivationFunctionLayer(activation_function ActivationFunc, layer int) () {
+	C.fann_set_activation_function_layer(ann.object, C.enum_fann_activationfunc_enum(activation_function), C.int(layer))
+}
+
+func (ann *Ann) GetActivationSteepness(layer int, neuron int) (FannType) {
+	return FannType(C.fann_get_activation_steepness(ann.object, C.int(layer), C.int(layer)))
+}
+
+func (ann *Ann) SetActivationSteepness(steepness FannType, layer int, neuron int) () {
+	C.fann_set_activation_steepness(ann.object, C.fann_type(steepness), C.int(layer), C.int(layer))
+}
+
+func (ann *Ann) SetActivationSteepnessLayer(steepness FannType, layer int) ( ) {
+	C.fann_set_activation_steepness_layer(ann.object, C.fann_type(steepness), C.int(layer))
+}
+
+func (ann *Ann) SetActivationSteepnessHidden(steepness FannType) ( ) {
+	C.fann_set_activation_steepness_hidden(ann.object, C.fann_type(steepness))
+}
+
+func (ann *Ann) SetActivationSteepnessOutput(steepness FannType) () {
+	C.fann_set_activation_steepness_output(ann.object, C.fann_type(steepness))
+}

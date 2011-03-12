@@ -104,3 +104,15 @@ func (td *TrainData) SaveTrainToFixed(filename string, decimal_point uint32) ( )
 	C.fann_save_train_to_fixed(td.object, cfn, C.uint(decimal_point))
 }
 
+func (td *TrainData) ScaleInputTrainData(new_min FannType, new_max FannType) () {
+	C.fann_scale_input_train_data(td.object, C.fann_type(new_min), C.fann_type(new_max))
+}
+
+func (td *TrainData) ScaleOutputTrainData(new_min FannType, new_max FannType) () {
+	C.fann_scale_output_train_data(td.object, C.fann_type(new_min), C.fann_type(new_max))
+}
+
+func (td *TrainData) ScaleTrainData(new_min FannType, new_max FannType) () {
+	C.fann_scale_train_data(td.object, C.fann_type(new_min), C.fann_type(new_max))
+}
+
