@@ -5,6 +5,33 @@ package fann
 import "C"
 import "unsafe"
 
+func ReadTrainFromFile(filename string) (*TrainData) {
+	var td TrainData
+
+	cfn := C.CString(filename)
+	defer C.free(unsafe.Pointer(cfn))
+
+	td.object = C.fann_read_train_from_file(cfn)
+
+	return &td
+}
+
+func (td *TrainData) Destroy() ( ) {
+	C.fann_destroy_train(td.object)
+}
+
+func (td *TrainData) Shuffle() () {
+	C.fann_shuffle_train_data(td.object)
+}
+
+func (ann *Ann) ScaleTrain(td *TrainData) () {
+	C.fann_scale_train(ann.object, td.object)
+}
+
+func (ann *Ann) DescaleTrain(td *TrainData) ( ) {
+	C.fann_descale_train(ann.object, td.object)
+}
+
 func (td *TrainData) Lenght() (uint32) {
 	return uint32(C.fann_length_train_data(td.object))
 }

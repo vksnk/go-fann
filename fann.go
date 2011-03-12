@@ -61,17 +61,6 @@ func CreateFromFile(filename string) (*Ann) {
 }
 
 //run & test functions
-func ReadTrainFromFile(filename string) (*TrainData) {
-	var td TrainData
-
-	cfn := C.CString(filename)
-	defer C.free(unsafe.Pointer(cfn))
-
-	td.object = C.fann_read_train_from_file(cfn)
-
-	return &td
-}
-
 func (ann *Ann) Run(input []FannType) ([]FannType) {
 	c_out := C.fann_run(ann.object, (*C.fann_type)(&input[0]))
 	outputNum := ann.GetNumOutput()
@@ -92,22 +81,6 @@ func (ann *Ann) TrainOnFile(filename string, maxEpoches uint32, epochBetweenRepo
 	cfn := C.CString(filename)
 	defer C.free(unsafe.Pointer(cfn))
 	C.fann_train_on_file(ann.object, cfn, C.uint(maxEpoches), C.uint(epochBetweenReports), C.float(desiredError));
-}
-
-func (td *TrainData) Destroy() ( ) {
-	C.fann_destroy_train(td.object)
-}
-
-func (td *TrainData) ShuffleTrainData() () {
-	C.fann_shuffle_train_data(td.object)
-}
-
-func (ann *Ann) ScaleTrain(td *TrainData) () {
-	C.fann_scale_train(ann.object, td.object)
-}
-
-func (ann *Ann) DescaleTrain(td *TrainData) ( ) {
-	C.fann_descale_train(ann.object, td.object)
 }
 
 //TODO: finish it
