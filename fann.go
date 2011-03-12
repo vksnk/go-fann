@@ -297,3 +297,35 @@ func (ann *Ann) SetLearningMomentum(learning_momentum float32) ( ) {
 	C.fann_set_learning_momentum(ann.object, C.float(learning_momentum))
 }
 
+func (ann *Ann) ScaleInput(input_vector []FannType) ( ) {
+	C.fann_scale_input(ann.object, (*C.fann_type)(&input_vector[0]))
+}
+
+func (ann *Ann) ScaleOutput(output_vector []FannType) ( ) {
+	C.fann_scale_output(ann.object, (*C.fann_type)(&output_vector[0]))
+}
+
+func (ann *Ann) DescaleInput(input_vector []FannType) ( ) {
+	C.fann_descale_input(ann.object, (*C.fann_type)(&input_vector[0]))
+}
+
+func (ann *Ann) DescaleOutput(output_vector []FannType) ( ) {
+	C.fann_descale_output(ann.object, (*C.fann_type)(&output_vector[0]))
+}
+
+func (ann *Ann) GetTrainingAlgorithm() (TrainingAlgorithm) {
+	return TrainingAlgorithm(C.fann_get_training_algorithm(ann.object))
+}
+
+func (ann *Ann) SetTrainingAlgorithm(training_algorithm TrainingAlgorithm) () {
+	C.fann_set_training_algorithm(ann.object, C.enum_fann_train_enum(training_algorithm))
+}
+
+func (ann *Ann) GetTrainStopFunction() (StopFunction) {
+	return StopFunction(C.fann_get_train_stop_function(ann.object))
+}
+
+func (ann *Ann) SetTrainStopFunction(train_stop_function StopFunction) () {
+	C.fann_set_train_stop_function(ann.object, C.enum_fann_stopfunc_enum(train_stop_function))
+}
+

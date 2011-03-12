@@ -30,7 +30,20 @@ var COS ActivationFunc = C.FANN_COS
 //net types
 type Nettype C.enum_fann_nettype_enum
 
-var FANN_NETTYPE_LAYER Nettype = C.FANN_NETTYPE_LAYER
-var FANN_NETTYPE_SHORTCUT Nettype = C.FANN_NETTYPE_SHORTCUT
+var NETTYPE_LAYER Nettype = C.FANN_NETTYPE_LAYER
+var NETTYPE_SHORTCUT Nettype = C.FANN_NETTYPE_SHORTCUT
 
+//training algs
+type TrainingAlgorithm C.enum_fann_train_enum
+
+var TRAIN_INCREMENTAL TrainingAlgorithm = C.FANN_TRAIN_INCREMENTAL
+var TRAIN_BATCH TrainingAlgorithm = C.FANN_TRAIN_BATCH
+var TRAIN_RPROP TrainingAlgorithm = C.FANN_TRAIN_RPROP
+var TRAIN_QUICKPROP TrainingAlgorithm = C.FANN_TRAIN_QUICKPROP
+
+//stop functions
+type StopFunction C.enum_fann_stopfunc_enum
+
+var STOPFUNC_MSE StopFunction = C.FANN_STOPFUNC_MSE
+var STOPFUNC_BIT StopFunction = C.FANN_STOPFUNC_BIT
 
