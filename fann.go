@@ -329,3 +329,12 @@ func (ann *Ann) SetTrainStopFunction(train_stop_function StopFunction) () {
 	C.fann_set_train_stop_function(ann.object, C.enum_fann_stopfunc_enum(train_stop_function))
 }
 
+func (ann *Ann) GetTrainErrorFunction() (TrainErrorFunction) {
+	return TrainErrorFunction(C.fann_get_train_error_function(ann.object))
+}
+
+func (ann *Ann) SetTrainErrorFunction(train_error_function TrainErrorFunction) () {
+	C.fann_set_train_error_function(ann.object, C.enum_fann_errorfunc_enum(train_error_function))
+}
+
+

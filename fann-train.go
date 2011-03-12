@@ -1,6 +1,21 @@
 package fann
 /*
 #include <fann.h>
+
+static void cpFannTypeArray(fann_type* src, fann_type* dst, unsigned int n) {
+	unsigned int i = 0;
+	for(; i < n; i++)
+		dst[i] = src[i];
+}
+
+static void get_train_input(struct fann_train_data* td, fann_type* dst, unsigned int pos, unsigned int ln) {
+	cpFannTypeArray(td->input[pos], dst, ln);
+}
+
+static void get_train_output(struct fann_train_data* td, fann_type* dst, unsigned int pos, unsigned int ln) {
+	cpFannTypeArray(td->output[pos], dst, ln);
+}
+
 */
 import "C"
 import "unsafe"
@@ -18,6 +33,20 @@ func ReadTrainFromFile(filename string) (*TrainData) {
 
 func (td *TrainData) Destroy() ( ) {
 	C.fann_destroy_train(td.object)
+}
+
+func (td *TrainData) GetInput(i uint32) ([]FannType) {
+	num := td.GetNumInput()
+	input := make([]FannType, num)
+	C.get_train_input(td.object, (*C.fann_type)(&input[0]), C.uint(i), C.uint(num))
+	return input
+}
+
+func (td *TrainData) GetOutput(i uint32) ([]FannType) {
+	num := td.GetNumOutput()
+	output := make([]FannType, num)
+	C.get_train_output(td.object, (*C.fann_type)(&output[0]), C.uint(i), C.uint(num))
+	return output
 }
 
 func (td *TrainData) Shuffle() () {

@@ -47,3 +47,11 @@ type StopFunction C.enum_fann_stopfunc_enum
 var STOPFUNC_MSE StopFunction = C.FANN_STOPFUNC_MSE
 var STOPFUNC_BIT StopFunction = C.FANN_STOPFUNC_BIT
 
+//error function
+type TrainErrorFunction C.enum_fann_errorfunc_enum
+
+var ERRORFUNC_LINEAR TrainErrorFunction = C.FANN_ERRORFUNC_LINEAR
+var ERRORFUNC_TANH TrainErrorFunction = C.FANN_ERRORFUNC_TANH
+
+
+

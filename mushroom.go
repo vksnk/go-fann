@@ -31,7 +31,7 @@ func main() {
 
 	var i uint32
 	for i = 0; i < testData.Lenght(); i++ {
-		//ann.Test(test_data->input[i], test_data->output[i]);
+		ann.Test(testData.GetInput(i), testData.GetOutput(i))
 	}
 
 	fmt.Printf("MSE error on test data: %f\n", ann.GetMSE())
