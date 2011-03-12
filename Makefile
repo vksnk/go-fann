@@ -4,6 +4,7 @@ TARG=fann
 
 CGOFILES=\
 	fann.go\
+	fann-train.go\
 
 CGO_LDFLAGS=-lfann -lm
 
