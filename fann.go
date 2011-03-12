@@ -15,14 +15,6 @@ static void cpFannTypeArray(fann_type* src, fann_type* dst, unsigned int n) {
 		dst[i] = src[i];
 }
 
-static unsigned int td_get_num_input(struct fann_train_data* td) {
-	return td->num_input;
-}
-
-static unsigned int td_get_num_output(struct fann_train_data* td) {
-	return td->num_output;
-}
-
 */
 import "C"
 import "unsafe"
@@ -69,7 +61,6 @@ func CreateFromFile(filename string) (*Ann) {
 }
 
 //run & test functions
-//FANN_EXTERNAL struct fann_train_data *FANN_API fann_read_train_from_file(const char *filename);
 func ReadTrainFromFile(filename string) (*TrainData) {
 	var td TrainData
 
@@ -117,6 +108,49 @@ func (ann *Ann) ScaleTrain(td *TrainData) () {
 
 func (ann *Ann) DescaleTrain(td *TrainData) ( ) {
 	C.fann_descale_train(ann.object, td.object)
+}
+
+func (td *TrainData) Lenght() (uint32) {
+	return uint32(C.fann_length_train_data(td.object))
+}
+
+func MergeTrainData(td1 *TrainData, td2 *TrainData) (*TrainData) {
+	var td TrainData
+	td.object = C.fann_merge_train_data(td1.object, td2.object)
+	return &td
+}
+
+func (td* TrainData) Duplicate() (*TrainData) {
+	var td_dup TrainData
+	td_dup.object = C.fann_duplicate_train_data(td.object)
+	return &td_dup
+}
+
+func (td* TrainData) Subset(pos uint32, length uint32) (*TrainData) {
+	var td_sub TrainData
+	td_sub.object = C.fann_subset_train_data(td.object, C.uint(pos), C.uint(length))
+	return &td_sub
+}
+
+func (td *TrainData) GetNumInput() (uint32) {
+	return uint32(C.fann_num_input_train_data(td.object))
+}
+
+func (td *TrainData) GetNumOutput() (uint32) {
+	return uint32(C.fann_num_output_train_data(td.object))
+}
+
+func (td *TrainData) SaveTrain(filename string) () {
+	cfn := C.CString(filename)
+	defer C.free(unsafe.Pointer(cfn))
+	C.fann_save_train(td.object, cfn)
+}
+
+func (td *TrainData) SaveTrainToFixed(filename string, decimal_point uint32) ( ) {
+	cfn := C.CString(filename)
+	defer C.free(unsafe.Pointer(cfn))
+
+	C.fann_save_train_to_fixed(td.object, cfn, C.uint(decimal_point))
 }
 
 //TODO: finish it
@@ -242,16 +276,6 @@ func (ann *Ann) SetWeightArray(connections []Connection, num_connections uint32)
 
 func (ann *Ann) SetWeight(from_neuron uint32, to_neuron uint32, weight FannType) ( ) {
 	C.fann_set_weight(ann.object, C.uint(from_neuron), C.uint(to_neuron), C.fann_type(weight))
-}
-
-
-//additional functions
-func (td *TrainData) GetNumInput() (uint32) {
-	return uint32(C.td_get_num_input(td.object))
-}
-
-func (td *TrainData) GetNumOutput() (uint32) {
-	return uint32(C.td_get_num_output(td.object))
 }
 
 //list all activation functions

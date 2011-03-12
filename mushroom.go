@@ -28,12 +28,12 @@ func main() {
 	testData := fann.ReadTrainFromFile("datasets/mushroom.test")
 
 	ann.ResetMSE()
-	/*
-	for(i = 0; i < fann_length_train_data(test_data); i++)
-	{
-		fann_test(ann, test_data->input[i], test_data->output[i]);
+
+	var i uint32
+	for i = 0; i < testData.Lenght(); i++ {
+		//ann.Test(test_data->input[i], test_data->output[i]);
 	}
-	*/
+
 	fmt.Printf("MSE error on test data: %f\n", ann.GetMSE())
 
 	fmt.Println("Saving network.");
