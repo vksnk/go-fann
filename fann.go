@@ -73,6 +73,14 @@ func (ann *Ann) Train(input []FannType,  desired_output []FannType) ( ) {
 	C.fann_train(ann.object, (*C.fann_type)(&input[0]), (*C.fann_type)(&desired_output[0]))
 }
 
+func (ann *Ann) TrainEpoch(td *TrainData) (float32) {
+	return float32(C.fann_train_epoch(ann.object, td.object))
+}
+
+func (ann *Ann) TestData(td *TrainData) (float32) {
+	return float32(C.fann_test_data(ann.object, td.object))
+}
+
 func (ann *Ann) TrainOnData(td *TrainData, max_epochs uint32, epochs_between_reports uint32, desired_error float32) () {
 	C.fann_train_on_data(ann.object, td.object, C.uint(max_epochs), C.uint(epochs_between_reports), C.float(desired_error))
 }
@@ -84,6 +92,7 @@ func (ann *Ann) TrainOnFile(filename string, maxEpoches uint32, epochBetweenRepo
 }
 
 //TODO: finish it
+//FANN_EXTERNAL fann_type * FANN_API fann_test(struct fann *ann, fann_type * input,fann_type * desired_output);
 func (ann *Ann) Test(input []FannType,  desired_output []FannType) ( ) {
 	C.fann_test(ann.object, (*C.fann_type)(&input[0]), (*C.fann_type)(&desired_output[0]))
 }
@@ -206,5 +215,85 @@ func (ann *Ann) SetWeightArray(connections []Connection, num_connections uint32)
 
 func (ann *Ann) SetWeight(from_neuron uint32, to_neuron uint32, weight FannType) ( ) {
 	C.fann_set_weight(ann.object, C.uint(from_neuron), C.uint(to_neuron), C.fann_type(weight))
+}
+
+func (ann *Ann) GetQuickpropDecay() (float32) {
+	return float32(C.fann_get_quickprop_decay(ann.object))
+}
+
+func (ann *Ann) SetQuickpropDecay(quickprop_decay float32) () {
+	C.fann_set_quickprop_decay(ann.object, C.float(quickprop_decay))
+}
+
+func (ann *Ann) GetQuickpropMu() (float32) {
+	return float32(C.fann_get_quickprop_mu(ann.object))
+}
+
+func (ann *Ann) SetQuickpropMu(quickprop_mu float32) ( ) {
+	C.fann_set_quickprop_mu(ann.object, C.float(quickprop_mu))
+}
+
+func (ann *Ann) GetRpropIncreaseFactor() (float32) {
+	return float32(C.fann_get_rprop_increase_factor(ann.object))
+}
+
+func (ann *Ann) SetRpropIncreaseFactor(rprop_increase_factor float32) ( ) {
+	C.fann_set_rprop_increase_factor(ann.object, C.float(rprop_increase_factor))
+}
+
+func (ann *Ann) GetRpropDecreaseFactor() (float32) {
+	return float32(C.fann_get_rprop_decrease_factor(ann.object))
+}
+
+func (ann *Ann) SetRpropDecreaseFactor(rprop_decrease_factor float32) ( ) {
+	C.fann_set_rprop_decrease_factor(ann.object, C.float(rprop_decrease_factor))
+}
+
+func (ann *Ann) GetRpropDeltaMin() (float32) {
+	return float32(C.fann_get_rprop_delta_min(ann.object))
+}
+
+func (ann *Ann) SetRpropDeltaMin(rprop_delta_min float32) ( ) {
+	C.fann_set_rprop_delta_min(ann.object, C.float(rprop_delta_min))
+}
+
+func (ann *Ann) GetRpropDeltaMax() (float32) {
+	return float32(C.fann_get_rprop_delta_max(ann.object))
+}
+
+func (ann *Ann) SetRpropDeltaMax(rprop_delta_max float32) ( ) {
+	C.fann_set_rprop_delta_max(ann.object, C.float(rprop_delta_max))
+}
+
+func (ann *Ann) GetRpropDeltaZero() (float32) {
+	return float32(C.fann_get_rprop_delta_zero(ann.object))
+}
+
+func (ann *Ann) SetRpropDeltaZero(rprop_delta_max float32) ( ) {
+	C.fann_set_rprop_delta_zero(ann.object, C.float(rprop_delta_max))
+}
+
+func (ann *Ann) GetBitFailLimit() (FannType) {
+	return FannType(C.fann_get_bit_fail_limit(ann.object))
+}
+
+func (ann *Ann) SetBitFailLimit(bit_fail_limit FannType) ( ) {
+	C.fann_set_bit_fail_limit(ann.object, C.fann_type(bit_fail_limit))
+}
+
+func (ann *Ann) GetLearningRate() (float32) {
+	return float32(C.fann_get_learning_rate(ann.object))
+}
+
+func (ann *Ann) SetLearningRate(learning_rate float32) ( ) {
+	C.fann_set_learning_rate(ann.object, C.float(learning_rate))
+}
+
+func (ann *Ann) GetLearningMomentum() (float32 ) {
+	return float32(C.fann_get_learning_momentum(ann.object))
+}
+
+func (ann *Ann) SetLearningMomentum(learning_momentum float32) ( ) {
+	C.fann_set_learning_momentum(ann.object, C.float(learning_momentum))
 }
 
