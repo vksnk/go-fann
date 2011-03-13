@@ -7,6 +7,7 @@ CGOFILES=\
 	fann-train.go\
 	fann-enums.go\
 	fann-cascade.go\
+	fann-error.go\
 
 CGO_LDFLAGS=-lfann -lm
 
