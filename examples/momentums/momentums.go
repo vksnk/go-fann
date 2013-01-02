@@ -9,8 +9,8 @@ func main() {
 	const num_neurons_hidden = 96
 	const desired_error = 0.001
 
-	train_data := fann.ReadTrainFromFile("datasets/robot.train")
-	test_data := fann.ReadTrainFromFile("datasets/robot.test")
+	train_data := fann.ReadTrainFromFile("../../datasets/robot.train")
+	test_data := fann.ReadTrainFromFile("../../datasets/robot.test")
 
 	var momentum float32
 	for momentum = 0.0; momentum < 0.7; momentum += 0.1 {

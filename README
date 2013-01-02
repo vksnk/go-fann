@@ -1,7 +1,9 @@
 Go bindings for Fast Artificial Neural Networks(FANN) library.
 http://leenissen.dk/fann/wp/
 
-To build:
+To install:
+   
+go get 
 1. Run `make` to build a library
 2.a)Run `make example_name` to build example.
   b)./example_name

@@ -7,13 +7,13 @@ import (
 
 func main() {
 	const num_layers = 3
-	const num_neurons_hidden = 96
+	const num_neurons_hidden = 30
 	const desired_error = 0.001
 
 
 	fmt.Println("Creating network.");
 
-	train_data := fann.ReadTrainFromFile("datasets/robot.train")
+	train_data := fann.ReadTrainFromFile("../../datasets/robot.train")
 
 	ann := fann.CreateStandart(num_layers, []uint32{train_data.GetNumInput(), num_neurons_hidden, train_data.GetNumOutput()})
 
@@ -26,7 +26,7 @@ func main() {
 
 	fmt.Println("Testing network")
 
-	test_data := fann.ReadTrainFromFile("datasets/robot.test")
+	test_data := fann.ReadTrainFromFile("../../datasets/robot.test")
 
 	ann.ResetMSE()
 
