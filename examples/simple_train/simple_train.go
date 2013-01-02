@@ -13,7 +13,7 @@ func main() {
 	ann := fann.CreateStandart(numLayers, []uint32{2, 3, 1})
 	ann.SetActivationFunctionHidden(fann.SIGMOID_SYMMETRIC)
 	ann.SetActivationFunctionOutput(fann.SIGMOID_SYMMETRIC)
-	ann.TrainOnFile("datasets/xor.data", maxEpochs, epochsBetweenReports, desiredError)
+	ann.TrainOnFile("../../datasets/xor.data", maxEpochs, epochsBetweenReports, desiredError)
 	ann.Save("xor_float.net")
 	ann.Destroy()
 }

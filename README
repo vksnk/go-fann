@@ -1,8 +1,11 @@
 Go bindings for Fast Artificial Neural Networks(FANN) library.
 http://leenissen.dk/fann/wp/
 
-To build:
-1. Run `make` to build a library
-2.a)Run `make example_name` to build example.
-  b)./example_name
+To install:
+
+1. go get github.com/white-pony/go-fann
+
+2. a) `cd example/example_name && go build` to build example
+   b) ./example_name
+
 

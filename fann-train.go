@@ -1,5 +1,6 @@
 package fann
 /*
+#cgo LDFLAGS: -lfann -lm
 #include <fann.h>
 
 static void cpFannTypeArray(fann_type* src, fann_type* dst, unsigned int n) {
