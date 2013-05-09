@@ -34,7 +34,7 @@ type Ann struct {
 }
 
 //Create ann functions
-func CreateStandart(numLayers uint, layers []uint32) (*Ann) {
+func CreateStandard(numLayers uint, layers []uint32) (*Ann) {
 	var ann Ann
 	ann.object = C.fann_create_standard_array(C.uint(numLayers), (*C.uint)(&layers[0]))
 	return &ann

@@ -15,7 +15,7 @@ func main() {
 
 	train_data := fann.ReadTrainFromFile("../../datasets/robot.train")
 
-	ann := fann.CreateStandart(num_layers, []uint32{train_data.GetNumInput(), num_neurons_hidden, train_data.GetNumOutput()})
+	ann := fann.CreateStandard(num_layers, []uint32{train_data.GetNumInput(), num_neurons_hidden, train_data.GetNumOutput()})
 
 	fmt.Println("Training network.")
 
@@ -31,7 +31,7 @@ func main() {
 	ann.ResetMSE()
 
 	var i uint32
-	for i = 0; i < test_data.Lenght(); i++ {
+	for i = 0; i < test_data.Length(); i++ {
 		ann.Test(test_data.GetInput(i), test_data.GetOutput(i))
 	}
 
