@@ -62,7 +62,7 @@ func (ann *Ann) DescaleTrain(td *TrainData) ( ) {
 	C.fann_descale_train(ann.object, td.object)
 }
 
-func (td *TrainData) Lenght() (uint32) {
+func (td *TrainData) Length() (uint32) {
 	return uint32(C.fann_length_train_data(td.object))
 }
 

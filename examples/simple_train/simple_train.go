@@ -10,7 +10,7 @@ func main() {
 	const maxEpochs = 500000
 	const epochsBetweenReports = 1000
 
-	ann := fann.CreateStandart(numLayers, []uint32{2, 3, 1})
+	ann := fann.CreateStandard(numLayers, []uint32{2, 3, 1})
 	ann.SetActivationFunctionHidden(fann.SIGMOID_SYMMETRIC)
 	ann.SetActivationFunctionOutput(fann.SIGMOID_SYMMETRIC)
 	ann.TrainOnFile("../../datasets/xor.data", maxEpochs, epochsBetweenReports, desiredError)

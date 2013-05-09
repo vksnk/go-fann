@@ -15,7 +15,7 @@ func main() {
 	fmt.Println("Creating network.")
 
 	trainData := fann.ReadTrainFromFile("datasets/mushroom.train")
-	ann := fann.CreateStandart(numLayers, []uint32{trainData.GetNumInput(), numNeuronsHidden, 1})
+	ann := fann.CreateStandard(numLayers, []uint32{trainData.GetNumInput(), numNeuronsHidden, 1})
 
 	fmt.Println("Training network.")
 	ann.SetActivationFunctionHidden(fann.SIGMOID_SYMMETRIC_STEPWISE)
@@ -30,7 +30,7 @@ func main() {
 	ann.ResetMSE()
 
 	var i uint32
-	for i = 0; i < testData.Lenght(); i++ {
+	for i = 0; i < testData.Length(); i++ {
 		ann.Test(testData.GetInput(i), testData.GetOutput(i))
 	}
 

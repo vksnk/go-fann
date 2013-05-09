@@ -16,7 +16,7 @@ func main() {
 	for momentum = 0.0; momentum < 0.7; momentum += 0.1 {
 		fmt.Printf("============= momentum = %f =============\n", momentum)
 
-		ann := fann.CreateStandart(num_layers, []uint32{train_data.GetNumInput(), num_neurons_hidden, train_data.GetNumOutput()})
+		ann := fann.CreateStandard(num_layers, []uint32{train_data.GetNumInput(), num_neurons_hidden, train_data.GetNumOutput()})
 		ann.SetTrainingAlgorithm(fann.TRAIN_INCREMENTAL)
 		ann.SetLearningMomentum(momentum)
 		ann.TrainOnData(train_data, 2000, 500, desired_error)
