@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fann"
+	"github.com/white-pony/go-fann"
 )
 
 func main() {
