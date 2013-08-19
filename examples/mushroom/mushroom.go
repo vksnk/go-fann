@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fann"
+	"github.com/white-pony/go-fann"
 	"fmt"
 )
 
@@ -14,7 +14,7 @@ func main() {
 
 	fmt.Println("Creating network.")
 
-	trainData := fann.ReadTrainFromFile("datasets/mushroom.train")
+	trainData := fann.ReadTrainFromFile("../../datasets/mushroom.train")
 	ann := fann.CreateStandard(numLayers, []uint32{trainData.GetNumInput(), numNeuronsHidden, 1})
 
 	fmt.Println("Training network.")
@@ -25,7 +25,7 @@ func main() {
 
 	fmt.Println("Testing network")
 
-	testData := fann.ReadTrainFromFile("datasets/mushroom.test")
+	testData := fann.ReadTrainFromFile("../../datasets/mushroom.test")
 
 	ann.ResetMSE()
 
