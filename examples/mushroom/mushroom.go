@@ -15,7 +15,7 @@ func main() {
 	fmt.Println("Creating network.")
 
 	trainData := fann.ReadTrainFromFile("../../datasets/mushroom.train")
-	ann := fann.CreateStandard(numLayers, []uint32{trainData.GetNumInput(), numNeuronsHidden, 1})
+	ann := fann.CreateStandard(numLayers, []uint32{trainData.GetNumInput(), numNeuronsHidden, trainData.GetNumOutput()})
 
 	fmt.Println("Training network.")
 	ann.SetActivationFunctionHidden(fann.SIGMOID_SYMMETRIC_STEPWISE)
